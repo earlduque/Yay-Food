@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Food" max_length="40" name="x_snc_yay_food_food" type="collection">
+        <element display="true" label="Food" max_length="400" name="food" type="string"/>
+        <element label="Members" max_length="4000" name="members" reference="x_snc_yay_food_members" type="glide_list"/>
+        <element label="Note" max_length="400" name="note" type="string"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Rating" max_length="20" name="rating" type="decimal"/>
+        <element label="Restaurant" max_length="32" name="restaurant" reference="x_snc_yay_food_restaurants" type="reference"/>
+        <index name="index">
+            <element name="restaurant"/>
+        </index>
+    </element>
+</database>

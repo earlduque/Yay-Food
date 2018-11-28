@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope) {
+  /* widget controller */
+  var c = this;
+	
+	$scope.create_group = function(groupName){
+		if (groupName == null || groupName == '') {alert('Please enter a name.');return;}
+		c.data.group_name = groupName;
+		c.server.update();
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>choose_group</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Choose group</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	data.groups = [];
+	var groups = new GlideRecord('x_snc_yay_food_groups');
+	groups.orderBy('number');
+	groups.query();
+	while(groups.next()){
+		var group = {};
+		group.name = groups.getValue('name').toString();
+		group.sys_id = groups.getUniqueValue().toString();
+		var restaurants = new GlideRecord('x_snc_yay_food_restaurants');
+		restaurants.addQuery('group',groups.sys_id);
+		restaurants.query();
+		group.amount = restaurants.getRowCount();
+		data.groups.push(group);
+	}
+	
+	if (input != null && input.group_name){
+		data.new_name = input.group_name;
+		data.group_name_input = '';
+		var new_group = new GlideRecord('x_snc_yay_food_groups');
+		new_group.initialize();
+		new_group.setValue('name',data.new_name);
+		new_group.insert();
+		var newest_group = {};
+		newest_group.name = data.new_name;
+		newest_group.sys_id = new_group.getUniqueValue().toString();
+		newest_group.amount = 0;
+		data.groups.push(newest_group);
+	}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin-eduque</sys_created_by>
+        <sys_created_on>2018-11-17 22:18:01</sys_created_on>
+        <sys_id>ae38789e4ff5a300c8b501b18110c7fc</sys_id>
+        <sys_mod_count>62</sys_mod_count>
+        <sys_name>Choose group</sys_name>
+        <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
+        <sys_update_name>sp_widget_ae38789e4ff5a300c8b501b18110c7fc</sys_update_name>
+        <sys_updated_by>admin-eduque</sys_updated_by>
+        <sys_updated_on>2018-11-18 05:15:57</sys_updated_on>
+        <template><![CDATA[<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-3">Welcome to Yay Food!</h1>
+    <p class="lead">By Yay Duque</p>
+    <p>
+      Get Started by choosing your group or create a new group.
+    </p>
+  </div>
+</div>
+<ul class="list-group">
+  <a href="#!" class="list-group-item" ng-repeat="group in data.groups">{{group.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{group.amount}}</span></a>
+  <div id="accordion" role="tablist">
+    <div class="card-header" role="tab" id="headingOne">
+      <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="list-group-item list-group-item-action">Create a new group</a>
+    </div>
+    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="list-group-item">
+        <div class="input-group">
+          <input type="text" ng-model="c.data.group_name_input" class="form-control" placeholder="Enter group name" aria-label="" aria-describedby="basic-addon1">
+          <div class="input-group-append">
+            <button data-toggle="collapse" href="#collapseOne" class="nput-group-text" type="button" ng-click="create_group(c.data.group_name_input);">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="ua_table_licensing_config">
+    <ua_table_licensing_config action="INSERT_OR_UPDATE">
+        <is_fulfillment>false</is_fulfillment>
+        <license_condition/>
+        <license_model>none</license_model>
+        <license_roles/>
+        <name>x_snc_yay_food_groups</name>
+        <op_delete>true</op_delete>
+        <op_insert>true</op_insert>
+        <op_update>true</op_update>
+        <owner_condition/>
+        <sys_class_name>ua_table_licensing_config</sys_class_name>
+        <sys_created_by>admin-eduque</sys_created_by>
+        <sys_created_on>2018-11-17 21:52:15</sys_created_on>
+        <sys_id>cd5230da4ff5a300c8b501b18110c7ca</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_snc_yay_food_groups</sys_name>
+        <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
+        <sys_update_name>ua_table_licensing_config_cd5230da4ff5a300c8b501b18110c7ca</sys_update_name>
+        <sys_updated_by>admin-eduque</sys_updated_by>
+        <sys_updated_on>2018-11-17 21:52:15</sys_updated_on>
+    </ua_table_licensing_config>
+</record_update>

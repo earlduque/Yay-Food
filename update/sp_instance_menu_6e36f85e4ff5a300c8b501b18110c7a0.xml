@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance_menu">
+    <sp_instance_menu action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id/>
+        <order>1</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column/>
+        <sp_widget display_value="Yay Food Header Menu">1b56bc5e4ff5a300c8b501b18110c7ad</sp_widget>
+        <sys_class_name>sp_instance_menu</sys_class_name>
+        <sys_created_by>admin-eduque</sys_created_by>
+        <sys_created_on>2018-11-17 22:09:17</sys_created_on>
+        <sys_id>6e36f85e4ff5a300c8b501b18110c7a0</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Yay Food Header Menu</sys_name>
+        <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
+        <sys_update_name>sp_instance_menu_6e36f85e4ff5a300c8b501b18110c7a0</sys_update_name>
+        <sys_updated_by>admin-eduque</sys_updated_by>
+        <sys_updated_on>2018-11-17 22:11:22</sys_updated_on>
+        <title>Yay Food Header Menu</title>
+        <url/>
+        <widget_parameters><![CDATA[{
+	"enable_cart": {
+		"displayValue": "true",
+		"value": true
+	},
+      "enable_wishlist": {
+        "displayValue": "true",
+          "value": true
+      }
+}]]></widget_parameters>
+    </sp_instance_menu>
+    <sys_translated_text action="delete_multiple" query="documentkey=6e36f85e4ff5a300c8b501b18110c7a0"/>
+</record_update>
