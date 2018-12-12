@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope) {
+        <client_script><![CDATA[function($scope, $uibModal) {
   /* widget controller */
   var c = this;
 	
@@ -10,9 +10,46 @@
 		c.data.restaurant_name = restaurantName;
 		c.server.update();
 	}
+	
+	c.openModal = function(name, sys_id) {
+		c.data.restaurant_name = name;
+		c.data.restaurant_sys_id = sys_id;
+		c.modalInstance = $uibModal.open({
+			templateUrl: 'modalTemplate',
+			scope: $scope
+		});
+	}
+	
+	c.openModal2 = function(entree) {
+		c.data.modal_entree_name = entree.name;
+		c.data.modal_entree_rating = entree.rating;
+		c.data.modal_entree_members = entree.members;
+		c.data.modal_entree_note = entree.note;
+		c.modalInstance = $uibModal.open({
+			templateUrl: 'modalTemplate2',
+			scope: $scope
+		});
+	}
+	
+	c.closeModal = function() {
+		c.modalInstance.close();
+	}
+	
+	c.addEntree = function(sys_id) {
+		//c.data.confirmed_remove_sys_id = sys_id;
+		//c.server.update();
+		c.modalInstance.close();
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css/>
+        <css>.list-group-item{
+  background-color: #F3F3F3;
+}
+
+.MobileFriend{
+  margin-left: 10px;
+  margin-right: 10px;
+}</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -27,16 +64,46 @@
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
-  /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+
+	data.group_id = $sp.getParameter('group');
+	data.no_group = false;
+	data.debug = true;
+
+	if (data.group_id) {
+		var group = new GlideRecord('x_snc_yay_food_groups');
+		group.get(data.group_id);
+		data.group_name = group.name.toString();}
+	else {
+		data.no_group = true;
+	}
+
 	data.restaurants = [];
 	var restaurants = new GlideRecord('x_snc_yay_food_restaurants');
 	restaurants.orderBy('name');
+	restaurants.addQuery('group', data.group_id);
 	restaurants.query();
 	while(restaurants.next()){
 		var restaurant = {};
 		restaurant.name = restaurants.getValue('name').toString();
 		restaurant.sys_id = restaurants.getUniqueValue().toString();
+		
+		var foodGR = new GlideRecord('x_snc_yay_food_food');
+		foodGR.addQuery('restaurant', restaurant.sys_id);
+		foodGR.orderByDesc('rating');
+		foodGR.query();
+		data.test = foodGR.getRowCount();
+		var food = [];
+		while(foodGR.next()){
+			var entree = {};
+			entree.name = foodGR.getValue('food').toString();
+			entree.rating = foodGR.getValue('rating').toString();
+			entree.members = foodGR.getDisplayValue('members').toString();
+			entree.note = foodGR.getValue('note');
+			food.push(entree);
+		}
+		restaurant.food = food;
 		data.restaurants.push(restaurant);
 	}
 	
@@ -46,9 +113,11 @@
 		var new_restaurant = new GlideRecord('x_snc_yay_food_restaurants');
 		new_restaurant.initialize();
 		new_restaurant.setValue('name',data.new_name);
+		new_restaurant.setValue('group',data.group_id);
 		new_restaurant.insert();
 		var newest_restaurant = {};
 		newest_restaurant.name = data.new_name;
+		newest_restaurant.group = data.group_id;
 		newest_restaurant.sys_id = new_restaurant.getUniqueValue().toString();
 		data.restaurants.push(newest_restaurant);
 	}
@@ -58,40 +127,107 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>144</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-11-19 01:51:11</sys_updated_on>
-        <template><![CDATA[<nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
-  <div class="navbar-brand">
-    The Family!
-  </div>
-</nav>
-
-<ul class="list-group">
-  <div class="list-group-item" style="background-color: #53586D; color: #FFF;">
-    Choose a restaurant
-  </div>
-  <a href="#!" class="list-group-item" ng-repeat="group in data.groups">{{group.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{group.amount}}</span></a>
-  <div id="accordion" role="tablist">
-    <div class="card-header" role="tab" id="headingOne">
-      <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="list-group-item list-group-item-action">We're at a new restaurant!</a>
+        <sys_updated_on>2018-12-12 00:37:54</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.no_group == false">
+  <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
+    <div class="navbar-brand">
+      Yay Food by {{data.group_name}}
     </div>
-    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="list-group-item">
-        <div class="input-group">
-          <input type="text" ng-model="c.data.restaurant_name_input" class="form-control" placeholder="Restaurant name" aria-label="" aria-describedby="basic-addon1">
-          <div class="input-group-append">
-            <button data-toggle="collapse" href="#collapseOne" class="nput-group-text" type="button" ng-click="create_restauarnt(c.data.restaurant_name_input);">Create</button>
+  </nav>
+
+  <div class="MobileFriend">
+    <ul class="list-group">
+      <div class="list-group-item" style="background-color: #53586D; color: #FFF;">
+        Choose a restaurant
+      </div>
+
+      <ng-container ng-repeat="restaurant in data.restaurants">
+        <div id="accordion" role="tablist">
+          <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}">
+            <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.food.length}}</span></a>
+          </div>
+          <div id="collapse{{restaurant.sys_id}}" class="collapse" role="tabpanel" aria-labelledby="heading{{restaurant.sys_id}}">
+            <div ng-repeat="entree in restaurant.food">
+              <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF" ng-click="c.openModal2(entree)">
+                <b>{{entree.rating}}</b> - {{entree.name}} <span class="badge badge-primary badge-pill" style="color: #72778A">{{entree.members}}</span> <span class="badge badge-pill badge-warning" style="color: #212529; background-color: #ffc107;" ng-if="entree.note">Has Note</span>
+              </div>
+            </div>
+            <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF" ng-click="c.openModal(restaurant.name, restaurant.sys_id)">
+              We tried something new!
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div id="accordion" role="tablist">
+        <div class="card-header" role="tab" id="headingOne">
+          <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="list-group-item list-group-item-action">We're at a new restaurant!</a>
+        </div>
+        <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF">
+            <div class="input-group">
+              <input type="text" ng-model="data.restaurant_name_input" class="form-control" placeholder="Restaurant name" aria-label="" aria-describedby="basic-addon1">
+              <div class="input-group-append">
+                <button data-toggle="collapse" href="#collapseOne" class="nput-group-text" type="button" ng-click="create_restauarnt(data.restaurant_name_input);">Create</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ul>
   </div>
-</ul>]]></template>
+</div>
+
+<div ng-if="data.debug">
+  <font color="#000000">
+    test: {{data.restaurant_name_input}}
+    object: {{data.restaurants.length}}
+    food: {{data.test}}
+  </font>
+</div>
+
+<div ng-if="data.no_group == true">
+  <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
+    <div class="navbar-brand">
+      No group selected. <a href="?id=choose_group">Go back</a> and select a group.
+    </div>
+  </nav>
+</div>
+
+<script type="text/ng-template" id="modalTemplate">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">Adding food to {{data.restaurant_name}}</h4>
+  </div>
+		<div class="panel-footer text-right">
+   		<button class="btn btn-primary" ng-click="c.addEntree(data.restaurant_sys_id)">${Add}</button>
+			<button class="btn btn-secondary" ng-click="c.closeModal()">${Cancel}</button>
+  </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modalTemplate2">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">Details for {{data.modal_entree_name}}?</h4>
+  </div>
+  	<div class="panel-body">
+  		Name: {{data.modal_entree_name}}<BR>
+      Rating: {{data.modal_entree_rating}}<BR>
+      Rated by: {{data.modal_entree_members}}<BR>
+      <span ng-if="data.modal_entree_note">Note: {{data.modal_entree_note}}</span>
+  </div>
+		<div class="panel-footer text-right">
+			<button class="btn btn-secondary" ng-click="c.closeModal()">${Close}</button>
+  </div>
+  </div>
+</script>]]></template>
     </sp_widget>
 </record_update>
