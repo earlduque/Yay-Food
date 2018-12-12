@@ -4,13 +4,13 @@
             <element>number</element>
             <position>0</position>
             <sys_created_by>admin-eduque</sys_created_by>
-            <sys_created_on>2018-11-17 22:57:44</sys_created_on>
-            <sys_id>5451c9164f39a300c8b501b18110c72e</sys_id>
+            <sys_created_on>2018-12-12 23:01:46</sys_created_on>
+            <sys_id>0ff1b512139aeb001f2f53173244b0c2</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_yay_food_restaurants" sys_domain="global" view="Default view">1451c9164f39a300c8b501b18110c728</sys_ui_section>
             <sys_updated_by>admin-eduque</sys_updated_by>
-            <sys_updated_on>2018-11-17 22:57:44</sys_updated_on>
+            <sys_updated_on>2018-12-12 23:01:46</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -18,13 +18,13 @@
             <element>name</element>
             <position>1</position>
             <sys_created_by>admin-eduque</sys_created_by>
-            <sys_created_on>2018-11-17 22:57:44</sys_created_on>
-            <sys_id>d851c9164f39a300c8b501b18110c72e</sys_id>
+            <sys_created_on>2018-12-12 23:01:46</sys_created_on>
+            <sys_id>c7f1b512139aeb001f2f53173244b0c3</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_yay_food_restaurants" sys_domain="global" view="Default view">1451c9164f39a300c8b501b18110c728</sys_ui_section>
             <sys_updated_by>admin-eduque</sys_updated_by>
-            <sys_updated_on>2018-11-17 22:57:44</sys_updated_on>
+            <sys_updated_on>2018-12-12 23:01:46</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -32,13 +32,13 @@
             <element>location</element>
             <position>2</position>
             <sys_created_by>admin-eduque</sys_created_by>
-            <sys_created_on>2018-11-17 22:57:44</sys_created_on>
-            <sys_id>5051c9164f39a300c8b501b18110c72f</sys_id>
+            <sys_created_on>2018-12-12 23:01:46</sys_created_on>
+            <sys_id>4ff1b512139aeb001f2f53173244b0c3</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_yay_food_restaurants" sys_domain="global" view="Default view">1451c9164f39a300c8b501b18110c728</sys_ui_section>
             <sys_updated_by>admin-eduque</sys_updated_by>
-            <sys_updated_on>2018-11-17 22:57:44</sys_updated_on>
+            <sys_updated_on>2018-12-12 23:01:46</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -46,13 +46,27 @@
             <element>group</element>
             <position>3</position>
             <sys_created_by>admin-eduque</sys_created_by>
-            <sys_created_on>2018-11-17 22:57:44</sys_created_on>
-            <sys_id>d451c9164f39a300c8b501b18110c72f</sys_id>
+            <sys_created_on>2018-12-12 23:01:46</sys_created_on>
+            <sys_id>c3f1b512139aeb001f2f53173244b0c4</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_yay_food_restaurants" sys_domain="global" view="Default view">1451c9164f39a300c8b501b18110c728</sys_ui_section>
             <sys_updated_by>admin-eduque</sys_updated_by>
-            <sys_updated_on>2018-11-17 22:57:44</sys_updated_on>
+            <sys_updated_on>2018-12-12 23:01:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>note</element>
+            <position>4</position>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2018-12-12 23:01:46</sys_created_on>
+            <sys_id>4bf1b512139aeb001f2f53173244b0c4</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_yay_food_restaurants" sys_domain="global" view="Default view">1451c9164f39a300c8b501b18110c728</sys_ui_section>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2018-12-12 23:01:46</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>

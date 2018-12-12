@@ -41,6 +41,10 @@
 		restaurants.addQuery('group',groups.sys_id);
 		restaurants.query();
 		group.amount = restaurants.getRowCount();
+		var entrees = new GlideRecord('x_snc_yay_food_food');
+		entrees.addQuery('restaurant.group',group.sys_id);
+		entrees.query();
+		group.entrees = entrees.getRowCount();
 		data.groups.push(group);
 	}
 	
@@ -63,14 +67,14 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-17 22:18:01</sys_created_on>
         <sys_id>ae38789e4ff5a300c8b501b18110c7fc</sys_id>
-        <sys_mod_count>72</sys_mod_count>
+        <sys_mod_count>83</sys_mod_count>
         <sys_name>Choose group</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_ae38789e4ff5a300c8b501b18110c7fc</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-12-11 22:32:50</sys_updated_on>
+        <sys_updated_on>2018-12-12 23:44:44</sys_updated_on>
         <template><![CDATA[<div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="display-3">Welcome to Yay Food!</h1>
@@ -81,7 +85,9 @@
   </div>
 </div>
 <ul class="list-group">
-  <a href="?id=yayfood&group={{group.sys_id}}" class="list-group-item" ng-repeat="group in data.groups">{{group.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{group.amount}}</span></a>
+  <a href="?id=yayfood&group={{group.sys_id}}" class="list-group-item" ng-repeat="group in data.groups">{{group.name}}
+    <span class="badge badge-secondary badge-pill" style="background-color: #72778A">{{group.entrees}} Items</span>
+    <span class="badge badge-primary badge-pill" style="background-color: #52576A">{{group.amount}} Restaurants</span></a>
   <div id="accordion" role="tablist">
     <div class="card-header" role="tab" id="headingOne">
       <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="list-group-item list-group-item-action">Create a new group</a>
