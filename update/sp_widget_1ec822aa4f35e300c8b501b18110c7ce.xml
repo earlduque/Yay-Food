@@ -46,6 +46,15 @@
 	}
 	
 	c.addEntree = function(sys_id) {
+		if (!c.data.entree_name || !c.data.rating){
+			alert('Please complete all fields');
+			return;
+		}
+		var valid_rating = /^\-?(?=\d)\d*\.?(?=\d)\d*$/;
+		if (valid_rating.test(c.data.rating) == false){
+			alert('Invalid rating. Please use a decimal number');
+			return;
+		}
 		c.data.new_entree_restaurant = sys_id;
 		c.server.update();
 		c.modalInstance.close();
@@ -58,6 +67,15 @@
 		c.server.update();
 		c.modalInstance.close();
 	}
+	
+	c.deleteEntree = function(sys_id){
+		var confirm_delete = confirm('Are you sure you want to delete this entree? The action is irreversible.');
+		//alert(confirm_delete);
+		if (confirm_delete) {
+			c.data.confirmed_delete = true;
+			c.server.update();
+		}
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.list-group-item{
@@ -67,6 +85,29 @@
 .MobileFriend{
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.btn{
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 9px;
+  font-size: 13px;
+  line-height: 1.42857;
+  border-radius: 3px;
+  user-select: none;
+}
+
+.btn-destructive{
+  color: #fff;
+  background-color: #f95050;
+  border-color: #f71f1f;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -92,6 +133,7 @@
 	data.members_id_array = [];
 	data.add_note = false;
 
+	//group in parameters?
 	if (data.group_id) {
 		var group = new GlideRecord('x_snc_yay_food_groups');
 		group.get(data.group_id);
@@ -100,6 +142,7 @@
 		data.no_group = true;
 	}
 
+	//who are the members of this group?
 	data.members = [];
 	var members = new GlideRecord('x_snc_yay_food_members');
 	members.addQuery('group', data.group_id);
@@ -112,6 +155,7 @@
 		data.members.push(member);
 	}
 
+	//add a new entree to the restaurant
 	if (input != null && input.entree_name && input.rating && input.new_entree_restaurant){
 		//data.testadd = true;
 		var new_entree = new GlideRecord('x_snc_yay_food_food');
@@ -135,6 +179,7 @@
 		//data.array_to_push = member_array.join(',');
 	}
 	
+	//update the note of this restaurant
 	if (input != null && input.add_note == true){
 		var update_note = new GlideRecord('x_snc_yay_food_restaurants');
 		update_note.get(input.add_note_to_restaurant);
@@ -144,7 +189,15 @@
 		data.add_note = false;
 		data.add_note_to_restaurant = '';
 	}
+	
+	//delete an entrree
+	if (input != null && input.confirmed_delete){
+		var foodDeleteGR = new GlideRecord('x_snc_yay_food_food');
+		foodDeleteGR.get(input.delete_entree);
+		foodDeleteGR.deleteRecord();
+	}
 
+	//get the restaurants and entrees for this group
 	data.restaurants = [];
 	var restaurants = new GlideRecord('x_snc_yay_food_restaurants');
 	restaurants.orderBy('name');
@@ -168,12 +221,15 @@
 			entree.rating = foodGR.getValue('rating').toString();
 			entree.members = foodGR.getDisplayValue('members').toString();
 			entree.note = foodGR.getValue('note');
+			entree.sys_id = foodGR.getUniqueValue();
+			entree.created = foodGR.getValue('sys_created_on').toString();
 			food.push(entree);
 		}
 		restaurant.food = food;
 		data.restaurants.push(restaurant);
 	}
 
+	//add a new restaurant
 	if (input != null && input.restaurant_name){
 		data.new_name = input.restaurant_name;
 		data.restaurant_name_input = '';
@@ -195,14 +251,14 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>279</sys_mod_count>
+        <sys_mod_count>342</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-12-12 23:46:13</sys_updated_on>
+        <sys_updated_on>2018-12-16 17:18:10</sys_updated_on>
         <template><![CDATA[<div ng-if="data.no_group == false">
   <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
     <div class="navbar-brand">
@@ -256,7 +312,7 @@
         </div>
       </div>
     </ul>
-    
+
     <ul class="list-group">
       <div class="list-group-item" style="background-color: #53586D; color: #FFF;">
         Manage group (coming soon)
@@ -267,8 +323,42 @@
       <div class="list-group-item">
         Edit member name or delete a member
       </div>
-      <div class="list-group-item">
-        Delete an entree
+      <div class="card-header" role="tab" id="deleteentree">
+        <a data-toggle="collapse" href="#collapseentreetodelete" aria-expanded="true" aria-controls="collapseentreetodelete" class="list-group-item list-group-item-action">Delete an entree</a>
+      </div>
+      <div id="collapseentreetodelete" class="collapse" role="tabpanel" aria-labelledby="headingentreetodelete">
+        <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-xs-12 col-md-3 control-label">
+                <span class="label-text">Select Restaurant</span>
+              </label>
+              <div class="col-xs-12 col-md-9 form-field input_controls">
+                <select class="form-control" ng-model="c.data.delete_entree_from_restaurant">
+                  <option ng-repeat="restaurant in data.restaurants" value="{{$index}}">{{restaurant.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" ng-if="c.data.delete_entree_from_restaurant">
+              <label class="col-xs-12 col-md-3 control-label">
+                <span class="label-text">Select Entree to Delete</span>
+              </label>
+              <div class="col-xs-12 col-md-9 form-field input_controls">
+                <select class="form-control" ng-model="c.data.delete_entree">
+                  <option ng-repeat="entree in data.restaurants[c.data.delete_entree_from_restaurant].food" value="{{entree.sys_id}}">{{entree.name}} ({{entree.created}})</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" ng-if="c.data.delete_entree_from_restaurant && c.data.delete_entree">
+              <div class="col-xs-12 col-md-3 control-label">
+                
+              </div>
+              <div class="col-xs-12 col-md-9 form-field input_controls">
+                <button class="btn btn-destructive" ng-click="c.deleteEntree(c.data.delete_entree)">Delete</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="list-group-item">
         Delete a restaurant
@@ -277,6 +367,10 @@
   </div>  
 </div>
 
+<div>
+  <input class="checkbox" ng-model="c.data.debug" type="checkbox" id="debugcheckbox" style="display:inline;">
+  <label for="debugcheckbox" class="checkbox-label" name="debugcheckbox" style="color:#FFFFFF">Debug</label>
+</div>
 <div ng-if="data.no_group == true">
   <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
     <div class="navbar-brand">
@@ -295,65 +389,68 @@
     array: {{data.checkbox[0]}}{{data.checkbox[1]}} {{data.array_to_push}}<BR>
     membersidarray: {{data.members_id_array}}<BR>
     checkboxlength: {{data.checkbox.length}}<BR>
-    notegr: {{data.notegr}} {{data.add_note_text}} {{data.add_note_to_restaurant}}
-  </font>
-</div>
+    notegr: {{data.notegr}} {{data.add_note_text}} {{data.add_note_to_restaurant}}<BR>
+    delete_entree_from_restaurant: {{data.delete_entree_from_restaurant}}<BR>
+    restaurant object: {{data.restaurants[0].food}}<BR>
+    delete choices: {{data.delete_entree_from_restaurant}} - {{data.delete_entree}}
+    </font>
+    </div>
 
-<script type="text/ng-template" id="modalTemplate">
+    <script type="text/ng-template" id="modalTemplate">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">Adding food to {{data.modal_restaurant_name}}</h4>
-  	</div>
+      </div>
     <div class="panel-body">
     	<input class="form-control form-control-sm" type="text" placeholder="Entree Name *" ng-model="c.data.entree_name" required>
-      <input class="form-control form-control-sm" type="text" placeholder="Rating *" ng-model="c.data.rating" required>
+      <input class="form-control form-control-sm" type="text" placeholder="Rating (Numeric) *" ng-model="c.data.rating" required>
       <input class="form-control form-control-sm" type="text" placeholder="Note" ng-model="c.data.note">
       <div class="form-group">
 				<br>Rated by: 
         <span class="input-group-checkbox" ng-repeat="member in data.members">
 					<input id="checkbox{{$index}}" class="checkbox" type="checkbox" name="checkbox{{$index}}" style="display:inline" ng-model="c.data.checkbox[$index]">
 					<label for="checkbox{{$index}}" class="checkbox-label">{{member.name}}</label>
-				</span>
-			</div>
-    </div>
+      </span>
+      </div>
+      </div>
 		<div class="panel-footer text-right">
    		<button class="btn btn-primary" ng-click="c.addEntree(data.restaurant_sys_id)">${Add}</button>
 			<button class="btn btn-secondary" ng-click="c.closeModal()">${Cancel}</button>
-  	</div>
-  </div>
-</script>
+      </div>
+      </div>
+    </script>
 
-<script type="text/ng-template" id="modalTemplate2">
+    <script type="text/ng-template" id="modalTemplate2">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">Details for {{data.modal_entree_name}}?</h4>
-  	</div>
+      </div>
   	<div class="panel-body">
   		Name: {{data.modal_entree_name}}<BR>
       Rating: {{data.modal_entree_rating}}<BR>
       Rated by: {{data.modal_entree_members}}<BR>
       <span ng-if="data.modal_entree_note">Note: {{data.modal_entree_note}}</span>
-  	</div>
+      </div>
 		<div class="panel-footer text-right">
     	<button class="btn btn-primary">${Edit (Coming Soon)}</button>
 			<button class="btn btn-secondary" ng-click="c.closeModal()">${Close}</button>
-  	</div>
-  </div>
-</script>
-    
-<script type="text/ng-template" id="modalTemplate3">
+      </div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="modalTemplate3">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">Adding note for {{data.modal_restaurant_name}}</h4>
-  	</div>
+      </div>
   	<div class="panel-body">
   		<input class="form-control form-control-sm" type="text" placeholder="Note" ng-model="data.restaurant_note">
-  	</div>
+      </div>
 		<div class="panel-footer text-right">
     	<button class="btn btn-primary" ng-click="c.addNote(data.restaurant_sys_id, data.restaurant_note)">${Add/Edit}</button>
 			<button class="btn btn-secondary" ng-click="c.closeModal()">${Close}</button>
-  	</div>
-  </div>
-</script>]]></template>
+      </div>
+      </div>
+    </script>]]></template>
     </sp_widget>
 </record_update>

@@ -10,20 +10,20 @@ $dropdown-link-disabled-color: #ccc;&#13;
 </css_variables>
         <footer/>
         <footer_fixed>false</footer_fixed>
-        <header display_value="Stock Header">bf5ec2f2cb10120000f8d856634c9c0c</header>
+        <header display_value="Yay Stock Header">5b3dca5613daeb001f2f53173244b00d</header>
         <name>Yay Food Stock</name>
         <navbar_fixed>true</navbar_fixed>
         <sys_class_name>sp_theme</sys_class_name>
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-17 22:40:30</sys_created_on>
         <sys_id>375db0924f39a300c8b501b18110c7d6</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>Yay Food Stock</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_theme_375db0924f39a300c8b501b18110c7d6</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-11-17 22:45:04</sys_updated_on>
+        <sys_updated_on>2018-12-13 01:01:21</sys_updated_on>
     </sp_theme>
 </record_update>
