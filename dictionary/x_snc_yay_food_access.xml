@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Access" max_length="40" name="x_snc_yay_food_access" type="collection">
+        <element label="Group" max_length="32" name="group" reference="x_snc_yay_food_groups" type="reference"/>
+        <index name="index">
+            <element name="group"/>
+        </index>
+    </element>
+</database>

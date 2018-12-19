@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_snc_yay_food_groups</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Create Access Control</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	var new_group_access = new GlideRecord('x_snc_yay_food_access');
+	new_group_access.initialize();
+	new_group_access.setValue('group', current.sys_id);
+	new_group_access.insert();
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin-eduque</sys_created_by>
+        <sys_created_on>2018-12-18 22:54:06</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>6c492c50136623401f2f53173244b0c4</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Create Access Control</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
+        <sys_update_name>sys_script_6c492c50136623401f2f53173244b0c4</sys_update_name>
+        <sys_updated_by>admin-eduque</sys_updated_by>
+        <sys_updated_on>2018-12-18 22:56:25</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=6c492c50136623401f2f53173244b0c4"/>
+</record_update>

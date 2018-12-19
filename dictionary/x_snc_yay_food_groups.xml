@@ -2,5 +2,6 @@
     <element label="Groups" max_length="40" name="x_snc_yay_food_groups" type="collection">
         <element display="true" label="Name" max_length="80" name="name" type="string"/>
         <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Password" max_length="255" name="password" type="password2"/>
     </element>
 </database>
