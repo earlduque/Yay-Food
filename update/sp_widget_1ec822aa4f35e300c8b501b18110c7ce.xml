@@ -2,15 +2,16 @@
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
         <client_script><![CDATA[function($scope, $uibModal) {
-  /* widget controller */
-  var c = this;
-	
+	/* widget controller */
+	var c = this;
+	c.edit = false;
+
 	$scope.create_restauarnt = function(restaurantName){
 		if (restaurantName == null || restaurantName == '') {alert('Please enter a name.');return;}
 		c.data.restaurant_name = restaurantName;
 		c.server.update();
 	}
-	
+
 	c.openModal = function(name, sys_id) {
 		c.data.modal_restaurant_name = name;
 		c.data.restaurant_sys_id = sys_id;
@@ -19,18 +20,22 @@
 			scope: $scope
 		});
 	}
-	
+
 	c.openModal2 = function(entree) {
 		c.data.modal_entree_name = entree.name;
 		c.data.modal_entree_rating = entree.rating;
 		c.data.modal_entree_members = entree.members;
 		c.data.modal_entree_note = entree.note;
+		c.data.modal_entree_sys_id = entree.sys_id;
 		c.modalInstance = $uibModal.open({
 			templateUrl: 'modalTemplate2',
 			scope: $scope
 		});
+		c.modalInstance.closed.then(function(){
+			c.edit = false;
+		})
 	}
-	
+
 	c.openModal3 = function(name, sys_id, note){
 		c.data.modal_restaurant_name = name;
 		c.data.restaurant_sys_id = sys_id;
@@ -40,11 +45,11 @@
 			scope: $scope
 		});
 	}
-	
+
 	c.closeModal = function() {
 		c.modalInstance.close();
 	}
-	
+
 	c.addEntree = function(sys_id) {
 		if (!c.data.entree_name || !c.data.rating){
 			alert('Please complete all fields');
@@ -59,7 +64,7 @@
 		c.server.update();
 		c.modalInstance.close();
 	}
-	
+
 	c.addNote = function(sys_id, note) {
 		c.data.add_note_to_restaurant = sys_id;
 		c.data.add_note = true;
@@ -67,7 +72,7 @@
 		c.server.update();
 		c.modalInstance.close();
 	}
-	
+
 	c.deleteEntree = function(sys_id){
 		var confirm_delete = confirm('Are you sure you want to delete this entree? The action is irreversible.');
 		//alert(confirm_delete);
@@ -76,7 +81,7 @@
 			c.server.update();
 		}
 	}
-	
+
 	c.deleteRestaurant = function(sys_id){
 		var confirm_delete = confirm('Are you sure you want to delete this restaurant? The action is irreversible.');
 		if (confirm_delete){
@@ -87,25 +92,36 @@
 			}
 		}
 	}
-	
+
 	c.addMember = function(){
 		c.data.confirmed_add_member = true;
 		c.server.update();
 		alert('New group member succesfully added');
 	}
-	
+
 	c.editMember = function(){
 		c.data.confirmed_edit_member = true;
 		c.server.update();
 		alert('Group member successfully edited');
 	}
-	
+
 	c.deleteMember = function(){
 		var confirm_delete = confirm('Are you sure you want to delete this group member? They will be removed from the group and all associations to ratings will be removed. This is irreversible.');
 		if (confirm_delete){
 			c.data.confirmed_delete_member = true;
 			c.server.update();
 		}
+	}
+
+	c.editFood = function(){
+		c.edit = true;
+	}
+
+	c.saveEdits = function(){
+		c.edit = false;
+		c.data.confirmed_edits = true;
+		c.server.update();
+		c.modalInstance.close();
 	}
 }]]></client_script>
         <controller_as>c</controller_as>
@@ -165,6 +181,7 @@
 
 	data.group_id = $sp.getParameter('group');
 	data.no_group = false;
+	data.show_debug = true;
 	data.debug = false;
 	data.checkbox = [];
 	data.members_id_array = [];
@@ -289,6 +306,17 @@
 		data.confirmed_delete_restaurant = null;
 		data.cdelete_restaurant = null;
 	}
+	
+	//edit an entree
+	if (input !=null && input.confirmed_edits){
+		var food2editGR = new GlideRecord('x_snc_yay_food_food');
+		food2editGR.get(input.modal_entree_sys_id);
+		food2editGR.setValue('food',input.modal_entree_name);
+		food2editGR.setValue('rating',input.modal_entree_rating);
+		food2editGR.setValue('note',input.modal_entree_note);
+		food2editGR.update();
+		data.confirmed_edits = null;
+	}
 
 	//get the restaurants and entrees for this group
 	data.restaurants = [];
@@ -309,6 +337,8 @@
 		foodGR.query();
 		data.test = foodGR.getRowCount();
 		var food = [];
+		var ratings = 0;
+		var total_rates = foodGR.getRowCount();
 		while(foodGR.next()){
 			var entree = {};
 			entree.name = foodGR.getValue('food').toString();
@@ -317,8 +347,11 @@
 			entree.note = foodGR.getValue('note');
 			entree.sys_id = foodGR.getUniqueValue();
 			entree.created = foodGR.getValue('sys_created_on').toString();
+			ratings += parseFloat(foodGR.getValue('rating'));
+			if (foodGR.getValue('rating') == 0) total_rates--;
 			food.push(entree);
 		}
+		restaurant.avg_rating = (ratings/total_rates).toFixed(2);
 		restaurant.food = food;
 		data.restaurants.push(restaurant);
 	}
@@ -345,20 +378,22 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>376</sys_mod_count>
+        <sys_mod_count>440</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-12-19 00:56:41</sys_updated_on>
+        <sys_updated_on>2018-12-20 00:14:31</sys_updated_on>
         <template><![CDATA[<div ng-if="data.no_group == false">
-  <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
-    <div class="navbar-brand">
-      Yay Food by {{data.group_name}}
+  <div class="jumbotron jumbotron-fluid" style="background-image: url('yayfoodbanner.jpg'); background-size: auto 100%; color: #FFFFFF">
+    <div class="container">
+      <p style="text-align: center">
+        <a href="?index.html" style="color:#FFFFFF; text-decoration: underline;">Yay Food!</a> by {{data.group_name}}
+      </p>
     </div>
-  </nav>
+  </div>
 
   <div class="MobileFriend">
     <ul class="list-group">
@@ -366,10 +401,10 @@
         Choose a restaurant
       </div>
 
-      <ng-container ng-repeat="restaurant in data.restaurants">
+      <ng-container ng-repeat="restaurant in data.restaurants | orderBy:'-avg_rating'">
         <div id="accordion" role="tablist">
           <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}">
-            <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.food.length}}</span></a>
+            <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.food.length}}x</span><span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.avg_rating}}</span></a>
           </div>
           <div id="collapse{{restaurant.sys_id}}" class="collapse" role="tabpanel" aria-labelledby="heading{{restaurant.sys_id}}">
             <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF" ng-if="restaurant.note">
@@ -540,11 +575,7 @@
   </div>  
 </div>
 
-<div>
-  <input class="checkbox" ng-model="c.data.debug" type="checkbox" id="debugcheckbox" style="display:inline;">
-  <label for="debugcheckbox" class="checkbox-label" name="debugcheckbox" style="color:#FFFFFF">Debug</label>
-</div>
-<div ng-if="data.no_group == true">
+<div ng-if="data.no_group == true" class="MobileFriend">
   <nav class="navbar fixed-top navbar-dark bg-primary" style="background-color: #53586D">
     <div class="navbar-brand">
       No group selected. <a href="?id=choose_group">Go back</a> and select a group.
@@ -552,7 +583,11 @@
   </nav>
 </div>
 
-<div ng-if="data.debug">
+<div ng-if="data.show_debug" class="MobileFriend">
+  <input class="checkbox" ng-model="c.data.debug" type="checkbox" id="debugcheckbox" style="display:inline;">
+  <label for="debugcheckbox" class="checkbox-label" name="debugcheckbox" style="color:#FFFFFF">Debug</label>
+</div>
+<div ng-if="data.debug" class="MobileFriend" style="word-wrap: break-word;">
   <font color="#000000">
     {{data}}
   </font>
@@ -588,13 +623,14 @@
 			<h4 class="panel-title">Details for {{data.modal_entree_name}}?</h4>
   </div>
   	<div class="panel-body">
-  		Name: {{data.modal_entree_name}}<BR>
-      Rating: {{data.modal_entree_rating}}<BR>
-      Rated by: {{data.modal_entree_members}}<BR>
-      <span ng-if="data.modal_entree_note">Note: {{data.modal_entree_note}}</span>
+  		Name: <ng-container ng-if="c.edit==false">{{data.modal_entree_name}}</ng-container><ng-container ng-if="c.edit==true"><input class="form-control form-control-sm" type="text" ng-model="data.modal_entree_name"></ng-container><BR>
+      Rating: <ng-container ng-if="c.edit==false">{{data.modal_entree_rating}}</ng-container><ng-container ng-if="c.edit==true"><input class="form-control form-control-sm" type="text" ng-model="data.modal_entree_rating"></ng-container><BR>
+      <ng-container ng-if="c.edit==false">Rated by: {{data.modal_entree_members}}<BR></ng-container><ng-container ng-if="c.edit==true"><!--<input class="form-control form-control-sm" type="text" ng-model="data.modal_entree_members">--></ng-container>
+      <span ng-if="data.modal_entree_note">Note: <ng-container ng-if="c.edit==false">{{data.modal_entree_note}}</ng-container></span><ng-container ng-if="c.edit==true">Note: <input class="form-control form-control-sm" type="text" ng-model="data.modal_entree_note"></ng-container>
   </div>
 		<div class="panel-footer text-right">
-    	<button class="btn btn-primary" ng-if="data.access==true">${Edit (Coming Soon)}</button>
+    	<button class="btn btn-primary" ng-if="data.access==true && c.edit==false" ng-click="c.editFood();">${Edit}</button>
+      <button class="btn btn-primary" ng-if="data.access==true && c.edit==true" ng-click="c.saveEdits();">${Save Edits}</button>
 			<button class="btn btn-secondary" ng-click="c.closeModal()">${Close}</button>
   </div>
   </div>
