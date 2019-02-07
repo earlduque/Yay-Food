@@ -181,7 +181,7 @@
 
 	data.group_id = $sp.getParameter('group');
 	data.no_group = false;
-	data.show_debug = true;
+	data.show_debug = false;
 	data.debug = false;
 	data.checkbox = [];
 	data.members_id_array = [];
@@ -378,14 +378,14 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>440</sys_mod_count>
+        <sys_mod_count>443</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2018-12-20 00:14:31</sys_updated_on>
+        <sys_updated_on>2019-02-07 19:18:56</sys_updated_on>
         <template><![CDATA[<div ng-if="data.no_group == false">
   <div class="jumbotron jumbotron-fluid" style="background-image: url('yayfoodbanner.jpg'); background-size: auto 100%; color: #FFFFFF">
     <div class="container">
@@ -404,7 +404,7 @@
       <ng-container ng-repeat="restaurant in data.restaurants | orderBy:'-avg_rating'">
         <div id="accordion" role="tablist">
           <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}">
-            <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.food.length}}x</span><span class="badge badge-primary badge-pill" style="background-color: #72778A">{{restaurant.avg_rating}}</span></a>
+            <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A" ng-if="restaurant.food.length != 0">{{restaurant.food.length}}x</span><span class="badge badge-primary badge-pill" style="background-color: #72778A" ng-if="restaurant.avg_rating != 'NaN'">{{restaurant.avg_rating}}</span></a>
           </div>
           <div id="collapse{{restaurant.sys_id}}" class="collapse" role="tabpanel" aria-labelledby="heading{{restaurant.sys_id}}">
             <div class="list-group-item" style="margin-left: 10px; background-color: #FFFFFF" ng-if="restaurant.note">
