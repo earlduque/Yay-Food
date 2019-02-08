@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="sort" table="x_snc_yay_food_groups" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Avg. Rating (⬇)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>0</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:01:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>6552ef2413ebe7c01f2f53173244b0ac</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:15</sys_updated_on>
+            <value>1</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Avg. Rating (⬆)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>1</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:01:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>e552ef2413ebe7c01f2f53173244b0ad</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>2</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Single Rating (⬇)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>2</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:01:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>6552ef2413ebe7c01f2f53173244b0ae</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>3</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Single Rating (⬆)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>3</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:01:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>e152ef2413ebe7c01f2f53173244b0af</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>4</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Alphabetically (a➡z)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>4</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:26:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>2cf7a72813ebe7c01f2f53173244b0ee</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>5</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Alphabetically (z➡a)</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>5</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:26:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a8f7a72813ebe7c01f2f53173244b0ef</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>6</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Latest Reviewed</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>6</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:26:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>28f7a72813ebe7c01f2f53173244b0f0</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>7</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>sort</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Oldest Reviewed</label>
+            <language>en</language>
+            <name>x_snc_yay_food_groups</name>
+            <sequence>7</sequence>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:26:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a4f7a72813ebe7c01f2f53173244b0f1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:26:16</sys_updated_on>
+            <value>8</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>sort</element>
+            <name>x_snc_yay_food_groups</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin-eduque</sys_created_by>
+            <sys_created_on>2019-02-08 00:01:45</sys_created_on>
+            <sys_id>ed52ef2413ebe7c01f2f53173244b0ac</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sort</sys_name>
+            <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
+            <sys_update_name>sys_choice_x_snc_yay_food_groups_sort</sys_update_name>
+            <sys_updated_by>admin-eduque</sys_updated_by>
+            <sys_updated_on>2019-02-08 00:01:45</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

@@ -123,6 +123,11 @@
 		c.server.update();
 		c.modalInstance.close();
 	}
+	
+	c.newSort = function(selection){
+		c.data.confirmed_new_sort = true;
+		c.server.update();
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.list-group-item{
@@ -161,6 +166,15 @@
   color: #343d47;
   background-color: rgba(255, 255, 255, 0.45);
   border-color: #bdc0c4;
+}
+
+.sorter{
+  position: absolute;
+  right: 10px;
+}
+
+.custom-select{
+  color: black;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -192,11 +206,17 @@
 	if (data.group_id) {
 		var group = new GlideRecord('x_snc_yay_food_groups');
 		group.get(data.group_id);
-		data.group_name = group.name.toString();}
-	else {
+		data.group_name = group.name.toString();
+		//newSort?
+		if (input !=null && input.confirmed_new_sort){
+			group.setValue('sort', input.selectedSort);
+			group.update();
+		}
+		data.selectedSort = group.sort.toString();
+	}	else {
 		data.no_group = true;
 	}
-	
+
 	//grant editing access?
 	if ($sp.getParameter('pw')){
 		var check_access = new GlideRecord('x_snc_yay_food_access');
@@ -216,7 +236,7 @@
 		data.add_member_name = null;
 		data.confirmed_add_member = null;
 	}
-	
+
 	//edit member name
 	if (input !=null && input.confirmed_edit_member) {
 		var editMemberGR = new GlideRecord('x_snc_yay_food_members');
@@ -227,7 +247,7 @@
 		data.member_to_edit = null;
 		data.new_name = null;
 	}
-	
+
 	if (input!=null && input.confirmed_delete_member){
 		var deleteMemberGR = new GlideRecord ('x_snc_yay_food_members');
 		deleteMemberGR.get(input.member_to_edit);
@@ -235,7 +255,7 @@
 		data.confirmed_delete_member = null;
 		data.member_to_edit = null;
 	}
-	
+
 	//who are the members of this group?
 	data.members = [];
 	var members = new GlideRecord('x_snc_yay_food_members');
@@ -272,7 +292,7 @@
 
 		//data.array_to_push = member_array.join(',');
 	}
-	
+
 	//update the note of this restaurant
 	if (input != null && input.add_note == true){
 		var update_note = new GlideRecord('x_snc_yay_food_restaurants');
@@ -283,7 +303,7 @@
 		data.add_note = false;
 		data.add_note_to_restaurant = '';
 	}
-	
+
 	//delete an entrree
 	if (input != null && input.confirmed_delete){
 		var foodDeleteGR = new GlideRecord('x_snc_yay_food_food');
@@ -293,7 +313,7 @@
 		data.delete_entree_from_restaurant = null;
 		data.delete_entree = null;
 	}
-	
+
 	//delete a restaurant and all of its entries
 	if (input !=null && input.confirmed_delete_restaurant){
 		var restaurantFoodDeleteGR = new GlideRecord('x_snc_yay_food_food');
@@ -306,7 +326,7 @@
 		data.confirmed_delete_restaurant = null;
 		data.cdelete_restaurant = null;
 	}
-	
+
 	//edit an entree
 	if (input !=null && input.confirmed_edits){
 		var food2editGR = new GlideRecord('x_snc_yay_food_food');
@@ -321,7 +341,7 @@
 	//get the restaurants and entrees for this group
 	data.restaurants = [];
 	var restaurants = new GlideRecord('x_snc_yay_food_restaurants');
-	restaurants.orderBy('name');
+	//restaurants.orderBy('name');
 	restaurants.addQuery('group', data.group_id);
 	restaurants.query();
 	while(restaurants.next()){
@@ -339,6 +359,7 @@
 		var food = [];
 		var ratings = 0;
 		var total_rates = foodGR.getRowCount();
+		var highest_rate = 0;
 		while(foodGR.next()){
 			var entree = {};
 			entree.name = foodGR.getValue('food').toString();
@@ -349,11 +370,41 @@
 			entree.created = foodGR.getValue('sys_created_on').toString();
 			ratings += parseFloat(foodGR.getValue('rating'));
 			if (foodGR.getValue('rating') == 0) total_rates--;
+			if (entree.rating > highest_rate) highest_rate = entree.rating;
 			food.push(entree);
 		}
 		restaurant.avg_rating = (ratings/total_rates).toFixed(2);
+		restaurant.highest_rate = highest_rate;
 		restaurant.food = food;
 		data.restaurants.push(restaurant);
+	}
+	
+	//determine ordering
+	switch (data.selectedSort){
+		case '1':
+			data.sortOrder = '-avg_rating';
+			break;
+		case '2':
+			data.sortOrder = 'avg_rating';
+			break;
+		case '3':
+			data.sortOrder = '-highest_rate';
+			break;
+		case '4':
+			data.sortOrder = 'highest_rate';
+			break;
+		case '5':
+			data.sortOrder = 'name';
+			break;
+		case '6':
+			data.sortOrder = '-name';
+			break;
+		case '7':
+			data.sortOrder = '-created';
+			break;
+		case '8':
+			data.sortOrder = 'created';
+			break;
 	}
 
 	//add a new restaurant
@@ -378,14 +429,14 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>443</sys_mod_count>
+        <sys_mod_count>462</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2019-02-07 19:18:56</sys_updated_on>
+        <sys_updated_on>2019-02-08 00:30:32</sys_updated_on>
         <template><![CDATA[<div ng-if="data.no_group == false">
   <div class="jumbotron jumbotron-fluid" style="background-image: url('yayfoodbanner.jpg'); background-size: auto 100%; color: #FFFFFF">
     <div class="container">
@@ -399,9 +450,22 @@
     <ul class="list-group">
       <div class="list-group-item" style="background-color: #53586D; color: #FFF;">
         Choose a restaurant
+        <span class="sorter">
+          Sort: 
+          <select class="custom-select" ng-model="data.selectedSort" ng-change="c.newSort()">
+            <option value="1">Avg. Rating (⬇)</option>
+            <option value="2">Avg. Rating (⬆)</option>
+            <option value="3">Single Rating (⬇)</option>
+            <option value="4">Single Rating (⬆)</option>
+            <option value="5">Alpha (a➡z)</option>
+            <option value="6">Alpha (z➡a)</option>
+            <option value="7">Latest Created</option>
+            <option value="8">Oldest Created</option>
+          </select>
+        </span>
       </div>
 
-      <ng-container ng-repeat="restaurant in data.restaurants | orderBy:'-avg_rating'">
+      <ng-container ng-repeat="restaurant in data.restaurants | orderBy:data.sortOrder">
         <div id="accordion" role="tablist">
           <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}">
             <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}<span class="badge badge-primary badge-pill" style="background-color: #72778A" ng-if="restaurant.food.length != 0">{{restaurant.food.length}}x</span><span class="badge badge-primary badge-pill" style="background-color: #72778A" ng-if="restaurant.avg_rating != 'NaN'">{{restaurant.avg_rating}}</span></a>

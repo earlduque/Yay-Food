@@ -3,5 +3,17 @@
         <element display="true" label="Name" max_length="80" name="name" type="string"/>
         <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
         <element label="Password" max_length="255" name="password" type="password2"/>
+        <element attributes="edge_encryption_enabled=true" choice="3" default="1" label="Sort Preference" mandatory="true" max_length="40" name="sort" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Avg. Rating (⬇)" sequence="0" value="1"/>
+                <element inactive_on_update="false" label="Avg. Rating (⬆)" sequence="1" value="2"/>
+                <element inactive_on_update="false" label="Single Rating (⬇)" sequence="2" value="3"/>
+                <element inactive_on_update="false" label="Single Rating (⬆)" sequence="3" value="4"/>
+                <element inactive_on_update="false" label="Alphabetically (a➡z)" sequence="4" value="5"/>
+                <element inactive_on_update="false" label="Alphabetically (z➡a)" sequence="5" value="6"/>
+                <element inactive_on_update="false" label="Latest Reviewed" sequence="6" value="7"/>
+                <element inactive_on_update="false" label="Oldest Reviewed" sequence="7" value="8"/>
+            </choice>
+        </element>
     </element>
 </database>
