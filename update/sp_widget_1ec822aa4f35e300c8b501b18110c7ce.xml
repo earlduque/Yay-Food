@@ -128,6 +128,10 @@
 		c.data.confirmed_new_sort = true;
 		c.server.update();
 	}
+	
+	c.search = function(){
+		c.server.update();
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.list-group-item{
@@ -185,6 +189,10 @@
 
 .list-group-item{
   overflow: auto;
+}
+
+.search-all{
+  text-align: center;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -211,6 +219,10 @@
 	data.members_id_array = [];
 	data.add_note = false;
 	data.access = false;
+	if (input != null && input.search_term != '') {
+	} else {
+		data.search_term = '';
+	}
 
 	//group in parameters?
 	if (data.group_id) {
@@ -363,6 +375,7 @@
 
 		var foodGR = new GlideRecord('x_snc_yay_food_food');
 		foodGR.addQuery('restaurant', restaurant.sys_id);
+		if (input != null && input.search_term != '') foodGR.addQuery('IR_AND_OR_QUERY', input.search_term);
 		foodGR.orderByDesc('rating');
 		foodGR.query();
 		data.test = foodGR.getRowCount();
@@ -445,14 +458,14 @@
         <sys_created_by>admin-eduque</sys_created_by>
         <sys_created_on>2018-11-19 01:08:17</sys_created_on>
         <sys_id>1ec822aa4f35e300c8b501b18110c7ce</sys_id>
-        <sys_mod_count>523</sys_mod_count>
+        <sys_mod_count>552</sys_mod_count>
         <sys_name>YayFood</sys_name>
         <sys_package display_value="Yay Food" source="x_snc_yay_food">6fddacd64ff5a300c8b501b18110c7ff</sys_package>
         <sys_policy/>
         <sys_scope display_value="Yay Food">6fddacd64ff5a300c8b501b18110c7ff</sys_scope>
         <sys_update_name>sp_widget_1ec822aa4f35e300c8b501b18110c7ce</sys_update_name>
         <sys_updated_by>admin-eduque</sys_updated_by>
-        <sys_updated_on>2019-02-19 23:17:56</sys_updated_on>
+        <sys_updated_on>2019-03-22 21:11:52</sys_updated_on>
         <template><![CDATA[<div ng-if="data.no_group == false">
   <div class="jumbotron jumbotron-fluid" style="background-image: url('yayfoodbanner.jpg'); background-size: auto 100%; color: #FFFFFF">
     <div class="container">
@@ -463,6 +476,9 @@
   </div>
 
   <div class="MobileFriend">
+
+    <input placeholder="Search" ng-model="data.search_term" class="form-control search-all" ng-change="c.search()" /><br>
+
     <ul class="list-group">
       <div class="list-group-item" style="background-color: #53586D; color: #FFF;">
         Choose a restaurant
@@ -486,7 +502,7 @@
 
       <ng-container ng-repeat="restaurant in data.restaurants | orderBy:[data.sortOrder, data.sortOrder2, data.sortOrder3]">
         <div id="accordion" role="tablist">
-          <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}">
+          <div class="card-header" role="tab" id="heading{{restaurant.sys_id}}" ng-if="restaurant.food.length != 0">
             <a data-toggle="collapse" href="#collapse{{restaurant.sys_id}}" aria-expanded="true" aria-controls="collapse{{restaurant.sys_id}}" class="list-group-item list-group-item-action">{{restaurant.name}}
               <span class="badge badge-primary badge-pill" style="background-color: #72778A" ng-if="restaurant.avg_rating != 'NaN' && (data.selectedSort == '1' || data.selectedSort =='2')">
                 {{restaurant.avg_rating}}

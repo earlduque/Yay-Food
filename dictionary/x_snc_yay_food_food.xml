@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Food" max_length="40" name="x_snc_yay_food_food" type="collection">
+    <element label="Food" max_length="40" name="x_snc_yay_food_food" text_index="true" type="collection">
         <element display="true" label="Food" max_length="400" name="food" type="string"/>
         <element label="Members" max_length="4000" name="members" reference="x_snc_yay_food_members" type="glide_list"/>
         <element label="Note" max_length="400" name="note" type="string"/>
